@@ -1,7 +1,7 @@
 import pandas as pd
 
 
-sf = pd.read_csv('StudentsPerformance.csv')
+sf = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/StudentsPerformance.csv')
 
 print(sf.loc[sf.gender == 'female', ['gender', 'writing score']])  # фильтрация по составу с выборкой некоторых столбцов
 mean = sf['writing score'].mean()  # а найдем ка среднее значение столбца

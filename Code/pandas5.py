@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 
 
-my_stat = pd.read_csv('C:/Users/ediga/Downloads/my_stat (1).csv')
+my_stat = pd.read_csv('C:C:/Users/ediga/Projects/Python_Ln/Data/Files/my_stat (1).csv')
 subset_1 = my_stat.iloc[0:10, [0, 2]]
 subset_2 = my_stat.drop([0, 4], axis=0)  # удаление лишних строк
 subset_2 = subset_2.iloc[:, [1, 3]]

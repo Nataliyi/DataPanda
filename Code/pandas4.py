@@ -1,8 +1,8 @@
 import pandas as pd
 
-dt = pd.read_csv('C:/Users/ediga/Downloads/dota_hero_stats.csv')
-ac = pd.read_csv('C:/Users/ediga/Downloads/accountancy.csv')
-concentrations = pd.read_csv('C:/Users/ediga/Downloads/algae.csv')
+dt = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/dota_hero_stats.csv')
+ac = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/accountancy.csv')
+concentrations = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/algae.csv')
 
 print(dt.legs.value_counts())
 # подсчет всех значений в столбце

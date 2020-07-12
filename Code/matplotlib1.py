@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-sf = pd.read_csv('StudentsPerformance.csv')
-ic = pd.read_csv('C:/Users/ediga/Downloads/income.csv')
+sf = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/StudentsPerformance.csv')
+ic = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/income.csv')
 sf = sf.rename(columns={
     'math score': 'math_score',
     'reading score': 'reading_score',

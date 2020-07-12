@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-spf = pd.read_csv('StudentsPerformance.csv')
+spf = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/StudentsPerformance.csv')
 print(spf.describe())  # статистикааа!!!)))))Боги Питона, благодарю!
 print(spf.iloc[0:6, 0:3])  # вывод по индексу index location
 print(spf.iloc[[0, 3, 10], [0, 4, 6]])  # вывод по строкам index location
@@ -18,5 +18,5 @@ print(my_df)
 print(spf.loc[:7])
 print(spf.iloc[:7])
 
-tds = pd.read_csv('C:/Users/ediga/Downloads/titanic.csv')
+tds = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/titanic.csv')
 print(tds.info())  # полная информация о датафрейме

@@ -3,8 +3,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-data = pd.read_csv('C:/Users/ediga/Downloads/genome_matrix.csv', index_col=0)
-dt = pd.read_csv('C:/Users/ediga/Downloads/dota_hero_stats.csv')
+data = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/genome_matrix.csv', index_col=0)
+dt = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/dota_hero_stats.csv')
 
 g = sns.heatmap(data=data, cmap='viridis')
 # ваш код для создания теплокарты, укажите параметр cmap=viridis для той же цветовой схемы

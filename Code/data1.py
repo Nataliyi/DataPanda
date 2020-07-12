@@ -3,7 +3,7 @@ import numpy as np
 import seaborn as sns
 
 sns.set(rc={'figure.figsize': [9, 6]})  # заранее меняем размер ячеек в плот для красивого отображения
-events_data = pd.read_csv('C:/Users/ediga/Downloads/event_data_train.csv')
+events_data = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/event_data_train.csv')
 print(events_data.head(10))
 print(events_data.action.unique())  # смотрим, что за данные есть в колонке
 events_data['date'] = pd.to_datetime(events_data.timestamp, unit='s')  # перевели дату в более удобный формат

@@ -5,7 +5,7 @@ from sklearn import tree
 from sklearn.model_selection import train_test_split
 
 
-titanic_data = pd.read_csv('C:/Users/ediga/Downloads/train.csv')
+titanic_data = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/train.csv')
 print(titanic_data.isnull().sum())  # пропущенные значения
 X = titanic_data.drop(['PassengerId', 'Survived', 'Name', 'Ticket', 'Cabin'], axis=1)
 X = pd.get_dummies(X)  # классная штука, заменяет значения, где возможно на 1 и 0

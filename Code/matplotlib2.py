@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-ic = pd.read_csv('C:/Users/ediga/Downloads/income.csv')
+ic = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/income.csv')
 
 # ic.plot(kind='line')
 # plt.plot(ic.index, ic.income)

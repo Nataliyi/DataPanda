@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 
-sf = pd.read_csv('StudentsPerformance.csv')
+sf = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/StudentsPerformance.csv')
 sf = sf.rename(columns={
     'math score': 'math_score',
     'reading score': 'reading_score',
