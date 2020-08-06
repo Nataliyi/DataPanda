@@ -1,8 +1,7 @@
 import pandas as pd
 import numpy as np
-import seaborn as sns
 
-events_data = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/event_data_train.csv')
+events_data = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/event_data_train.zip', compression='zip')
 events_data['date'] = pd.to_datetime(events_data.timestamp, unit='s')  # перевели дату в более удобный формат
 events_data['day'] = events_data.date.dt.date
 sub_data = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/submissions_data_train.csv')
@@ -22,8 +21,9 @@ gap_data = events_data[['user_id', 'day', 'timestamp']].drop_duplicates(subset=[
       .groupby('user_id')['timestamp'].apply(list).apply(np.diff).values
 gap_data = pd.Series(np.concatenate(gap_data, axis=0))
 gap_data = gap_data / (24 * 60 * 60)  # интересный перевод в дни
-print(gap_data[gap_data < 290].hist())  # собственно сам график
-print(gap_data.quantile(0.90))
+# print(gap_data[gap_data < 290].hist())  # собственно сам график
+# print(gap_data.quantile(0.90))
+# print(1)
 # events_data.sort_values(['correct'], ascending=False).groupby('user_id').head(5)  # вычисляем Анатолия))
 events_data.groupby('user_id')['day'].nunique().idxmax()  # Пользователь, который провел на курсе больше всего дней
 users_data = events_data.groupby('user_id', as_index=False) \
@@ -39,4 +39,9 @@ users_days = events_data.groupby('user_id').day.nunique().to_frame().reset_index
 # coздаем пандовскую серию, сколько дней у юзера, после переводим в датафрейм
 users_data = users_data.merge(users_days, how='outer')
 users_data['passed_course'] = users_data.passed > 170
-print(users_data.groupby('passed_course').count())
+# print(users_data.groupby('passed_course').count())
+users_data[users_data.passed_course].day.median()
+users_min_time = events_data.groupby('users_id', as_index=False).agg({'timestamp': 'min'}) \
+    .rename({'timestamp': 'min_timestamp'}, axis=1)
+users_data = users_data.merge(users_min_time, how='outer')
+events_data

@@ -1,0 +1,56 @@
+import random
+import seaborn as sns
+
+
+def distance_chi_square_from_toss_coin():
+    eagles = 0
+    tails = 0
+    # подбрасываем монету 60 раз
+    for i in range(60):
+        if random.randint(0, 1):
+            eagles += 1
+        else:
+            tails += 1
+    # расчитываем расстояние хи-квадрат Пирсона:
+    # ((O1 - E1)|sqrt(E1))^2 + ... + ((On - En)|sqrt(En))^2
+    return (
+            (eagles - 30) ** 2 / 30 + (tails - 30) ** 2 / 30
+    )
+
+
+# делаем эксперимент 10 тыс.раз,
+# в каждом из которых по 60 раз будем подбрасывать монету
+# и сохранять возвращаемое значение расстояния хи-квадрат
+
+list_of_chi_square = []
+
+for i in range(10000):
+    list_of_chi_square.append(distance_chi_square_from_toss_coin())
+
+sns.distplot(list_of_chi_square)
+
+# посмотрим еще раз на значение, которое мы получали в нашем
+# конкретном наблюдении с выпаданием орла и решки (когда получили 40 орлов!):
+exp_eagles = 40
+exp_tails = 20
+# расчитываем расстояние хи-квадрат Пирсона:
+# ((O1 - E1)|sqrt(E1))^2 + ... + ((On - En)|sqrt(En))^2
+res_of_exp_chi_2 = (exp_eagles-30)**2/30 + (exp_tails-30)**2/30
+print(res_of_exp_chi_2)
+
+# посмотрим % значений с равным или большим значением нашего конкретного наблюдения:
+count_of_result_or_more_like_we_see = 0
+for i in list_of_chi_square:
+    if i >= res_of_exp_chi_2:
+        count_of_result_or_more_like_we_see += 1
+print(count_of_result_or_more_like_we_see)
+
+# стало интересно, а какова вероятность выпадания всех орлов?
+
+res_of_exp_chi_2_60 = (60-30)**2/30 + (0-30)**2/30
+print(res_of_exp_chi_2_60)
+count_of_result_60 = 0
+for i in list_of_chi_square:
+    if i >= res_of_exp_chi_2_60:
+        count_of_result_60 += 1
+print(count_of_result_60)
