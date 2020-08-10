@@ -41,7 +41,40 @@ users_data = users_data.merge(users_days, how='outer')
 users_data['passed_course'] = users_data.passed > 170
 # print(users_data.groupby('passed_course').count())
 users_data[users_data.passed_course].day.median()
-users_min_time = events_data.groupby('users_id', as_index=False).agg({'timestamp': 'min'}) \
+users_min_time = events_data.groupby('user_id', as_index=False).agg({'timestamp': 'min'}) \
     .rename({'timestamp': 'min_timestamp'}, axis=1)
 users_data = users_data.merge(users_min_time, how='outer')
-events_data
+events_data_train = pd.DataFrame()
+# for user_id in users_data.user_id:
+#     min_user_time = users_data[users_data.user_id == user_id].min_timestamp.item()
+#     time_treshold = min_user_time + 3 * 24 * 60 * 60
+#     users_events_data = events_data[(events_data.user_id == user_id) & (events_data.timestamp < time_treshold)]
+#     # данный по каждому юзеру по событиям за первые три дня
+#     events_data_train = events_data_train.append(users_events_data)
+#     break
+# очевидный, но очень долгий способ, поищем другой
+
+events_data['user_time'] = events_data.user_id.map(str) + '_' + events_data.timestamp.map(str)
+# сшиваем две колонки вместе
+
+learning_time_treshold = 3 * 24 * 60 * 60
+
+user_learning_time_treshold = users_min_time.user_id.map(str) + '_' + (users_min_time.min_timestamp + learning_time_treshold).map(str)
+# еще одно слияние... Но как то не очень получается, возможно потом сделаем по другому
+
+users_min_time['user_learning_time_treshold'] = user_learning_time_treshold
+
+events_data = events_data.merge(users_min_time[['user_id', 'user_learning_time_treshold']], how='outer')
+
+events_data_train = events_data[events_data.user_time <= events_data.user_learning_time_treshold]
+# для каждого пользователя мы отобрали значения с начала первого события и в течение 3 дней
+
+print(events_data_train.groupby('user_id').day.nunique().max())
+# делаем проверку, действительно ли взяли нужное количество дней
+
+
+sub_data['users_time'] = sub_data.user_id.map(str) + '_' + sub_data.timestamp.map(str)
+submissions_data = sub_data.merge(users_min_time[['user_id', 'user_learning_time_treshold']], how='outer')
+submissions_data_train = submissions_data[submissions_data.users_time <= submissions_data.user_learning_time_treshold]
+print(submissions_data_train.groupby('user_id').day.nunique().max())
+
