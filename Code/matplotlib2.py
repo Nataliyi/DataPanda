@@ -1,7 +1,6 @@
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
-import seaborn as sns
+
 
 ic = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/income.csv')
 

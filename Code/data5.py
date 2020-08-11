@@ -1,9 +1,7 @@
 import pandas as pd
-import seaborn as sns
 import numpy as np
-import matplotlib
 from sklearn import tree
-from sklearn.model_selection import train_test_split, cross_val_score
+
 
 cd_data = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/dogs_n_cats.csv')
 X_test = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/dogs_n_cats.csv').drop(['Вид', 'Высота', 'Шерстист'], axis=1)

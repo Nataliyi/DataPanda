@@ -18,7 +18,7 @@ users_events_data = events_data.pivot_table(index='user_id',
                                             aggfunc='count',
                                             fill_value=0).reset_index()
 gap_data = events_data[['user_id', 'day', 'timestamp']].drop_duplicates(subset=['user_id', 'day']) \
-      .groupby('user_id')['timestamp'].apply(list).apply(np.diff).values
+    .groupby('user_id')['timestamp'].apply(list).apply(np.diff).values
 gap_data = pd.Series(np.concatenate(gap_data, axis=0))
 gap_data = gap_data / (24 * 60 * 60)  # интересный перевод в дни
 # print(gap_data[gap_data < 290].hist())  # собственно сам график
@@ -59,7 +59,8 @@ events_data['user_time'] = events_data.user_id.map(str) + '_' + events_data.time
 
 learning_time_treshold = 3 * 24 * 60 * 60
 
-user_learning_time_treshold = users_min_time.user_id.map(str) + '_' + (users_min_time.min_timestamp + learning_time_treshold).map(str)
+user_learning_time_treshold = users_min_time.user_id.map(str) + '_' + (
+        users_min_time.min_timestamp + learning_time_treshold).map(str)
 # еще одно слияние... Но как то не очень получается, возможно потом сделаем по другому
 
 users_min_time['user_learning_time_treshold'] = user_learning_time_treshold
@@ -77,4 +78,40 @@ sub_data['users_time'] = sub_data.user_id.map(str) + '_' + sub_data.timestamp.ma
 submissions_data = sub_data.merge(users_min_time[['user_id', 'user_learning_time_treshold']], how='outer')
 submissions_data_train = submissions_data[submissions_data.users_time <= submissions_data.user_learning_time_treshold]
 print(submissions_data_train.groupby('user_id').day.nunique().max())
+
+X = submissions_data_train.groupby('user_id').day.nunique().to_frame().reset_index() \
+    .rename(columns={'day': 'days'})
+steps_tried = submissions_data_train.groupby('user_id').step_id.nunique().to_frame().reset_index() \
+    .rename(columns={'step_id': 'steps_tried'})
+# создали фрейм, где указано, сколько попыток было потрачено у каждого юзера
+
+X = X.merge(steps_tried, on='user_id', how='outer')
+X = X.merge(submissions_data.pivot_table(index='user_id',
+                                         columns='submission_status',
+                                         values='step_id',
+                                         aggfunc='count',
+                                         fill_value=0).reset_index())
+X['correct_ratio'] = X.correct / (X.correct + X.wrong)
+X = X.merge(events_data.pivot_table(index='user_id',
+                                    columns='action',
+                                    values='step_id',
+                                    aggfunc='count',
+                                    fill_value=0).reset_index()[['user_id']], how='outer')
+
+X = X.fillna(0)
+X = X.merge(users_data[['user_id', 'passed_course', 'is_gone_user']], how='outer')
+
+X = X[-((X.is_gone_user == False) & (X.passed_course == False))]
+# интересный способ фильтрации через '-', что означает противополжному в скобках
+
+print(X.groupby(['passed_course', 'is_gone_user']).user_id.count())
+# на каждом этапе не забываем проверять, все ли данные такие, как нам нужны
+
+y = X.passed_course.map(int)
+# отличный способ перевода в int
+
+X = X.drop(['passed_course', 'is_gone_user'], axis=1)
+X = X.set_index(X.user_id)
+# назначаем колонку главной по индексам)))) Чтобы не потереять данные(в момент обучения модели индекс не нужен)
+X = X.drop('user_id', axis=1)
 

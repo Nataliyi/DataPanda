@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 
 spf = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/StudentsPerformance.csv')
 print(spf.describe())  # статистикааа!!!)))))Боги Питона, благодарю!
