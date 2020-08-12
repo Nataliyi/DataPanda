@@ -2,6 +2,8 @@ from Tools.scripts.dutree import display
 from sklearn import tree
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import GridSearchCV
 
 
 titanic_data = pd.read_csv('C:/Users/ediga/Projects/Python_Ln/Data/Files/train.csv')
@@ -28,9 +30,28 @@ clf = tree.DecisionTreeClassifier(criterion='entropy', max_depth=3, min_samples_
 
 clf.fit(X_train, y_train)
 
-tree.plot_tree(clf.fit(X_train, y_train), feature_names=list(X), filled=True)
+# tree.plot_tree(clf.fit(X_train, y_train), feature_names=list(X), filled=True)
+
 # graph = Source(tree.export_graphviz(clf, out_file=None,
 #                                     feature_names=list(X),
 #                                     class_names=['Died', 'Survived'],
-#                                     filled=True))
+#                 stClassifier()                    filled=True))
 # display(SVG(graph.pipe(format='svg')))
+
+
+# random forest:
+clf_rf = RandomForestClassifier()
+parametrs = {'n_estimators': [10, 20, 30], 'max_depth': [2, 5, 7, 10]}
+# n_estimators - количество деревьев
+grid_search_cv_clf = GridSearchCV(clf_rf, parametrs, cv=5)
+grid_search_cv_clf.fit(X_train, y_train)
+print(grid_search_cv_clf.best_params_, grid_search_cv_clf.best_score_)
+
+best_clf = grid_search_cv_clf.best_estimator_
+feature_importances = best_clf.feature_importances_
+feature_importances_df = pd.DataFrame({
+    'features': list(X_train),
+    'feature_importances': feature_importances
+})
+print(feature_importances_df.sort_values('feature_importances', ascending=False))
+# параметр ascending - если хотим отсортировать по возрастанию, то True
